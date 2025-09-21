@@ -218,7 +218,23 @@ const DotGrid = ({
       }
     };
 
+    // Helper to check if click is near the input box button
+    function isClickNearInputButton(e) {
+      const inputBtn = document.querySelector('.send-btn');
+      if (!inputBtn) return false;
+      const rect = inputBtn.getBoundingClientRect();
+      const cx = e.clientX;
+      const cy = e.clientY;
+      // Allow clicks within 60px of the button center
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dist = Math.hypot(centerX - cx, centerY - cy);
+      return dist < 60;
+    }
+
     const onClick = e => {
+      // Only trigger dot shock if click is near input button
+      if (!isClickNearInputButton(e)) return;
       const rect = canvasRef.current.getBoundingClientRect();
       const cx = e.clientX - rect.left;
       const cy = e.clientY - rect.top;

@@ -78,15 +78,15 @@ function App() {
       {/* DotGrid background at the top level, behind all content */}
       <div style={{ width: '100%', height: '6000px', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
         <DotGrid 
-          dotSize={4}
-          gap={20}
+          dotSize={3}
+          gap={30}
           baseColor="rgba(0,0,0 , 0.3)"
           activeColor="#5227FF"
-          proximity={70}
+          proximity={50}
           shockRadius={150}
           shockStrength={10}
-          resistance={50}
-          returnDuration={1.05}
+          resistance={150}
+          returnDuration={5}
         />
       </div>
       <Header minimized={!isEditing} />
