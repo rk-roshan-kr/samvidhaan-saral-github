@@ -25,7 +25,7 @@ function App() {
     const articleRegex = /\b(article|art|a|preamble)\b\s*(\d*[A-Z]?)/i;
     const match = inputText.trim().match(articleRegex);
 
-    const baseUrl = 'https://samvidhaan-saral-api.onrender.com';
+    const baseUrl = process.env.REACT_APP_API_URL || 'https://samvidhaan-saral-api.onrender.com';
     let endpoint = `${baseUrl}/api/simplify`;
     let requestBody = { text: inputText };
     let method = 'POST';
