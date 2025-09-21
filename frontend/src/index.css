@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #ffffff;
+  color: #222;
+  line-height: 1.7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Moving blue glare effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: -25%;
+  left: -25%;
+  width: 150vw;
+  height: 150vh;
+  background: radial-gradient(circle at center, rgba(125, 165, 255, 0.35) 0%, rgba(125, 165, 255, 0.0) 60%);
+  animation: moveGlare 12s linear infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+  transform-origin: center;
+}
+
+@keyframes moveGlare {
+  0%   { transform: translate(0%, 0%) rotate(0deg) scale(1); }
+  50%  { transform: translate(10%, -5%) rotate(30deg) scale(1.1); }
+  100% { transform: translate(-5%, 10%) rotate(-15deg) scale(1.05); }
+}
+
+code {
+  font-family: 'Fira Code', Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

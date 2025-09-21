@@ -1,0 +1,264 @@
+
+/* --- Layout & App Container --- */
+.App {
+  min-height: 100vh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  overflow: hidden; /* Hide scroll on App, only scroll in result card */
+}
+
+/* --- Header --- */
+.App-header {
+  text-align: center;
+  margin-bottom: 24px;
+  margin-top: 48px;
+  transition: all 0.7s cubic-bezier(.77,0,.18,1);
+  z-index: 2;
+  width: 100%; /* Ensure header takes full width for centering */
+}
+
+/* Header minimized state when analysis is shown */
+.App.analyzed .App-header {
+  margin-top: 0px; /* Adjust top margin for minimized state */
+  margin-bottom: 0px;
+  transform: translateY(0px) scale(0.9); /* Slightly smaller and higher */
+}
+
+.App-header .title-card {
+  transition: transform 1.3s cubic-bezier(0.77,0,.175,1), opacity 0.8s;
+  transform: translateY(0);
+  opacity: 1;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.App.analyzed .App-header .title-card {
+  transform: translateY(0px) scale(0.85); /* Moves up and shrinks */
+  opacity: 1;
+}
+
+.App-header p {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.App.analyzed .App-header p {
+  opacity: 0; /* Hide description when minimized */
+  height: 0; /* Collapse space */
+  overflow: hidden;
+}
+
+
+/* --- Input Bar --- */
+.input-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.7s cubic-bezier(.77,0,.18,1); /* Smooth transition for all properties */
+  position: fixed; /* Fixed position */
+  bottom: 32px; /* At the bottom */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for perfect centering */
+  z-index: 9999; /* Ensure input bar is always above all content */
+  background-clip: padding-box;
+  opacity: 1;
+}
+
+/* Initial state for InputForm when centered, before analysis */
+.input-center-container .input-bar {
+  position: relative; /* Overrides fixed for centering */
+  bottom: auto;
+  left: auto;
+  transform: none;
+  margin-top: 24px; /* Space from header */
+  margin-bottom: 24px;
+  height: auto; /* Allow content to dictate height */
+}
+
+
+/* --- Scrollable Output Card --- */
+.result-scroll-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 24px; /* Space from minimized header */
+  margin-bottom: 120px; /* Space for fixed input bar at the bottom */
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  max-height: 60vh;
+  padding: 24px;
+  position: relative;
+  z-index: 1;
+}
+.input-center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh; /* Takes up vertical space to center content */
+  width: 100%;
+  position: relative;
+  flex-grow: 1; /* Allows it to take available space */
+}
+
+.input-bar-textarea {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  padding: 8px;
+  /* Control height dynamically with JS */
+  min-height: 40px; /* Adjust as needed for initial 2 rows */
+  max-height: 200px; /* Max height before scrollbar appears (approx 6-8 lines) */
+  overflow-y: hidden; /* Hide scrollbar by default, JS will manage */
+  resize: none; /* Prevent manual resizing */
+  background: transparent; /* Ensure textarea background is transparent */
+}
+.input-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.upload-btn {
+  background: none;
+  border: none;
+  cursor: not-allowed;
+  font-size: 1.2em;
+  color: #6c757d; /* Grey out disabled button */
+}
+.send-btn {
+  background: #1a237e;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0; /* Prevent button from shrinking */
+}
+.send-btn:hover {
+  background: #3949ab;
+}
+.send-btn:disabled {
+  background: #adb5bd;
+  cursor: not-allowed;
+}
+.char-count {
+  font-size: 0.8em;
+  color: #6c757d;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.error-message {
+  color: #dc3545;
+  font-size: 0.9em;
+  position: absolute;
+  bottom: -25px; /* Position below the input bar */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+}
+
+
+/* --- AI Response --- */
+.result-box {
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+.result-box h3 {
+  color: #1a237e;
+  margin-bottom: 12px;
+  font-size: 1.2em;
+}
+.result-box p, .result-box li, .result-box dd {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+.result-box hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 24px 0;
+}
+.result-box ul, .result-box dl {
+  margin-left: 20px;
+  padding-left: 0;
+}
+.result-box dt {
+  margin-top: 10px;
+  color: #343a40;
+}
+.result-box dd {
+  margin-left: 0;
+  padding-left: 10px;
+  border-left: 2px solid #ced4da;
+}
+
+
+/* Result box fade-in animation */
+.fade-in {
+  animation: fadeIn 1.2s ease-out forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Responsive tweaks for desktop and mobile */
+@media (max-width: 768px) {
+  .App-header {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .input-bar {
+    width: 90%;
+    max-width: 90vw;
+    padding: 8px;
+  }
+
+  .result-scroll-container {
+    width: 90%;
+    max-width: 90vw;
+    padding: 16px;
+    margin-bottom: 100px; /* Adjust for smaller fixed input bar */
+  }
+
+  .App.analyzed .App-header {
+    margin-top: 1px;
+  }
+}
+
+@media (min-width: 769px) {
+  .App-header {
+    font-size: 2rem;
+    text-align: center; /* Keep header centered on desktop too for consistency */
+  }
+
+  .input-bar {
+    width: 60%; /* Wider on desktop */
+    max-width: 700px;
+  }
+
+  .result-scroll-container {
+    width: 60%;
+    max-width: 700px;
+  }
+}

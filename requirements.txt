@@ -1,0 +1,8 @@
+Flask
+Flask-Cors
+python-dotenv
+google-generativeai
+langchain-community
+langchain-google-genai
+pypdf2
+gunicorn
