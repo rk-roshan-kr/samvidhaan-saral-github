@@ -19,7 +19,12 @@ load_dotenv()
 app = Flask(__name__)
 
 # Enable Cross-Origin Resource Sharing (CORS) to allow our React frontend to communicate with this backend
-CORS(app)
+# Allow requests specifically from your Netlify frontend URL
+cors = CORS(app, resources={
+    r"/api/*": {
+        "origins": ["https://samvidhaan-saral-app.netlify.app", "http://localhost:3000"]
+    }
+})
 
 # ------------------
 # GOOGLE AI CONFIGURATION
