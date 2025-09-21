@@ -13,7 +13,7 @@ function App() {
   const [isEditing, setIsEditing] = useState(true); // True when input is active/centered, false when result is shown/input is at bottom
 
   const handleSimplifyClick = async () => {
-    if (!inputText) {
+    if (!inputText.trim()) {
       setError("Please enter some text to analyze.");
       return;
     }
@@ -21,29 +21,42 @@ function App() {
     setAnalysisResult(null); // Clear previous result
     setError('');
 
+    // Logic to decide which API endpoint to call
+    const articleRegex = /\b(article|art|a|preamble)\b\s*(\d*[A-Z]?)/i;
+    const match = inputText.trim().match(articleRegex);
+
+    const baseUrl = 'https://samvidhaan-saral-api.onrender.com';
+    let endpoint = `${baseUrl}/api/simplify`;
+    let requestBody = { text: inputText };
+    let method = 'POST';
+
+    if (match) {
+      const articleNumber = match[1].toLowerCase() === 'preamble' ? 'preamble' : (match[2] || '');
+      endpoint = `${baseUrl}/api/get_article/${articleNumber}`;
+      requestBody = null;
+      method = 'GET';
+    }
+
     try {
-      const response = await fetch('https://samvidhaan-saral-api.onrender.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: inputText }),
-      });
+      const options = {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+      };
+      if (requestBody) {
+        options.body = JSON.stringify(requestBody);
+      }
+
+      const response = await fetch(endpoint, options);
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Server returned a non-JSON error' }));
+        const errorData = await response.json().catch(() => ({ error: 'Server returned an invalid response' }));
         throw new Error(errorData.error || 'Network response was not ok');
       }
-
       const data = await response.json();
-
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
+      if (data.error) { throw new Error(data.error); }
       setAnalysisResult(data);
       setIsEditing(false); // Switch to "result shown" mode
-      
+
     } catch (err) {
       console.error("Fetch error:", err);
       setError(err.message || 'Failed to fetch analysis. Please check the backend server and console for details.');
