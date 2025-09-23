@@ -4,7 +4,7 @@ import Header from './components/Header';
 import InputForm from './components/InputForm';
 import AnalysisResult from './components/AnalysisResult';
 import DotGrid from './components/dotbackground';
-import useApiWarmup from './hooks/useApiWarmup';
+import useApiStatus from './hooks/useApiStatus';
 
 function NotificationPopup({ message, duration = 120000, onDismiss }) {
   const [visible, setVisible] = useState(true);
@@ -49,7 +49,7 @@ function NotificationStack({ notifications }) {
       position: 'fixed',
       bottom: '32px',
       right: '32px',
-      zIndex: 10001, 
+      zIndex: 10001, // Set to highest index in code +2
       display: 'flex',
       flexDirection: 'column-reverse',
       alignItems: 'flex-end',
@@ -153,11 +153,26 @@ function App() {
       duration: 120000,
     },
   ];
-  // Ping / warm-up backend once on app mount
-  useApiWarmup(process.env.REACT_APP_API_URL || 'https://samvidhaan-saral-api.onrender.com');
+
+  // Track API status
+  const apiStatus = useApiStatus(process.env.REACT_APP_API_URL || 'https://samvidhaan-saral-api.onrender.com');
 
   return (
     <div className={`App${!isEditing ? ' analyzed' : ''}`}>
+      {/* API Status Indicator */}
+      <div style={{
+        position: 'fixed',
+        top: '10px',
+        right: '10px',
+        padding: '5px 10px',
+        borderRadius: '5px',
+        backgroundColor: apiStatus === 'online' ? 'green' : apiStatus === 'offline' ? 'red' : 'gray',
+        color: 'white',
+        fontWeight: 'bold',
+        zIndex: 10002,
+      }}>
+        {apiStatus === 'online' ? 'API Online' : apiStatus === 'offline' ? 'API Offline' : 'Checking API...'}
+      </div>
       {/* Notification Stack for judges and users */}
       <NotificationStack notifications={notifications} />
       {/* DotGrid background at the top level, behind all content */}
