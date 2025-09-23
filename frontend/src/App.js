@@ -4,6 +4,7 @@ import Header from './components/Header';
 import InputForm from './components/InputForm';
 import AnalysisResult from './components/AnalysisResult';
 import DotGrid from './components/dotbackground';
+import useApiWarmup from './hooks/useApiWarmup';
 
 function NotificationPopup({ message, duration = 120000, onDismiss }) {
   const [visible, setVisible] = useState(true);
@@ -152,6 +153,9 @@ function App() {
       duration: 120000,
     },
   ];
+  // Ping / warm-up backend once on app mount
+  useApiWarmup(process.env.REACT_APP_API_URL || 'https://samvidhaan-saral-api.onrender.com');
+
   return (
     <div className={`App${!isEditing ? ' analyzed' : ''}`}>
       {/* Notification Stack for judges and users */}
