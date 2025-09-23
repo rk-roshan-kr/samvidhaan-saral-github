@@ -156,6 +156,7 @@ function App() {
 
   // Track API status
   const apiStatus = useApiStatus(process.env.REACT_APP_API_URL || 'https://samvidhaan-saral-api.onrender.com');
+  console.log(`API Status: ${apiStatus}`); // Log API status to console
 
   return (
     <div className={`App${!isEditing ? ' analyzed' : ''}`}>
@@ -173,20 +174,37 @@ function App() {
       }}>
         {apiStatus === 'online' ? 'API Online' : apiStatus === 'offline' ? 'API Offline' : 'Checking API...'}
       </div>
+
+      {/* Loading spinner during text processing */}
+      {isLoading && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 10003,
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#5227FF',
+        }}>
+          Processing...
+        </div>
+      )}
+
       {/* Notification Stack for judges and users */}
       <NotificationStack notifications={notifications} />
       {/* DotGrid background at the top level, behind all content */}
       <div style={{ width: '100%', height: '6000px', position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
         <DotGrid 
-          dotSize={4}
-          gap={20}
-          baseColor="rgba(0,0,0 , 0.3)"
-          activeColor="#5227FF"
-          proximity={70}
-          shockRadius={150}
-          shockStrength={10}
-          resistance={50}
-          returnDuration={1.05}
+        dotSize={3}
+        gap={15}
+        baseColor="rgba(41,41,41,0.4  )"
+        activeColor="#5227FF"
+        proximity={50}
+        shockRadius={450}
+        shockStrength={5}
+        resistance={750}
+        returnDuration={1.5}
         />
       </div>
       <Header minimized={!isEditing} />
