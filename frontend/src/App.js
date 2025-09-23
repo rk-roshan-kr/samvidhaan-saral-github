@@ -48,7 +48,7 @@ function NotificationStack({ notifications }) {
       position: 'fixed',
       bottom: '32px',
       right: '32px',
-      zIndex: 10001, // Set to highest index in code +2
+      zIndex: 10001, 
       display: 'flex',
       flexDirection: 'column-reverse',
       alignItems: 'flex-end',
